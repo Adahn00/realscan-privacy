@@ -1,29 +1,330 @@
-Privacy Policy for RealScan — AI Content Detector
-Last updated: March 20, 2026
-Overview
-RealScan ("the Extension") is a Chrome browser extension that detects whether content is AI-generated. This privacy policy explains what data the Extension accesses, how it is used, and what is stored.
-Data We Do Not Collect
-RealScan does not collect, transmit, store, or share any personal information. We do not operate any servers or databases. We have no ability to identify who you are or track your browsing activity.
-Data Processed Locally
-The following data is stored exclusively on your device using Chrome's local storage (chrome.storage.local) and never leaves your device except as described below:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RealScan — Privacy Policy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-Your Google Gemini API key, saved only so you don't have to re-enter it
-Your preferred scan mode (Text, Image, or Auto)
+    :root {
+      --bg: #080c10;
+      --surface: #0e1419;
+      --border: #1e2a35;
+      --accent: #00ffa3;
+      --accent2: #00c8ff;
+      --text: #e8f0f7;
+      --muted: #5a7a8a;
+      --mono: 'Space Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
 
-Data Sent to Third Parties
-When you initiate a scan, the content you select (text or image) is sent directly from your browser to the Google Gemini API (generativelanguage.googleapis.com) for AI detection analysis. This transmission is governed by Google's Privacy Policy. RealScan does not intercept, log, or store this data at any point.
-No other third parties receive any data.
-Permissions Justification
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
 
-activeTab — to access the page you are currently viewing when you activate a scan
-scripting — to inject the selection overlay onto the active page
-storage — to save your API key and preferences locally on your device
-Host permission (generativelanguage.googleapis.com) — to send selected content to the Gemini API for analysis
-Host permission (<all_urls>) — to allow the scan overlay to work on any webpage you choose to analyze
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-Children's Privacy
-RealScan is not directed at children under the age of 13 and does not knowingly collect any information from children.
-Changes to This Policy
-If this policy changes, the updated version will be posted at this URL with a revised "Last updated" date.
-Contact
-If you have questions about this privacy policy, please email the creator at realscan.extension@gmail.com
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 60px 32px 80px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle at 40% 40%, #00ffa3, #0099cc);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .header-text h1 {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    .header-text p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Updated badge */
+    .updated {
+      margin-left: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 36px;
+    }
+
+    h2 {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    p {
+      color: #a0b4c0;
+      margin-bottom: 10px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    /* Highlight box */
+    .highlight {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+
+    .highlight p { color: var(--text); margin: 0; }
+
+    /* Permission table */
+    .permissions {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    .permissions tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .permissions tr:last-child { border-bottom: none; }
+
+    .permissions td {
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #a0b4c0;
+      vertical-align: top;
+    }
+
+    .permissions td:first-child {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      white-space: nowrap;
+      padding-right: 20px;
+      width: 1%;
+    }
+
+    .permissions-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    /* Link */
+    a {
+      color: var(--accent2);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,200,255,0.3);
+      transition: border-color 0.2s;
+    }
+    a:hover { border-color: var(--accent2); }
+
+    /* Contact card */
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .contact-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .contact-card p { margin: 0; color: #a0b4c0; font-size: 14px; }
+    .contact-card strong { color: var(--text); }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer span {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    .footer-accent { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="logo">👁</div>
+      <div class="header-text">
+        <h1>REALSCAN</h1>
+        <p>AI Content Detector · Privacy Policy</p>
+      </div>
+      <div class="updated">LAST UPDATED: MARCH 20, 2026</div>
+    </header>
+
+    <section>
+      <h2>Overview</h2>
+      <p>RealScan is a Chrome browser extension that detects whether content is AI-generated. This privacy policy explains what data the Extension accesses, how it is used, and what is stored.</p>
+      <div class="highlight">
+        <p>RealScan does not collect, transmit, store, or share any personal information. We do not operate any servers or databases and have no ability to identify who you are or track your browsing activity.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Data Stored Locally</h2>
+      <p>The following data is stored exclusively on your device using Chrome's local storage (<code style="font-family:var(--mono);font-size:12px;color:var(--accent2)">chrome.storage.local</code>) and never leaves your device except as described below:</p>
+      <div class="permissions-wrap">
+        <table class="permissions">
+          <tr>
+            <td>API Key</td>
+            <td>Your Google Gemini API key, saved only so you don't have to re-enter it on each use.</td>
+          </tr>
+          <tr>
+            <td>Scan Mode</td>
+            <td>Your preferred scan mode (Text, Image, or Auto), saved as a local preference.</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Data Sent to Third Parties</h2>
+      <p>When you initiate a scan, the content you select (text or image) is sent directly from your browser to the <strong>Google Gemini API</strong> for AI detection analysis. This transmission is governed by <a href="https://policies.google.com/privacy" target="_blank">Google's Privacy Policy</a>.</p>
+      <p>RealScan does not intercept, log, or store this data at any point. No other third parties receive any data.</p>
+    </section>
+
+    <section>
+      <h2>Permissions Justification</h2>
+      <div class="permissions-wrap">
+        <table class="permissions">
+          <tr>
+            <td>activeTab</td>
+            <td>To access the page you are currently viewing when you activate a scan.</td>
+          </tr>
+          <tr>
+            <td>scripting</td>
+            <td>To inject the selection overlay onto the active page so you can drag-select content.</td>
+          </tr>
+          <tr>
+            <td>storage</td>
+            <td>To save your API key and preferences locally on your device.</td>
+          </tr>
+          <tr>
+            <td>generativelanguage<br>.googleapis.com</td>
+            <td>To send selected content to the Gemini API for AI detection analysis.</td>
+          </tr>
+          <tr>
+            <td>&lt;all_urls&gt;</td>
+            <td>To allow the scan overlay to work on any webpage you choose to analyze.</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Children's Privacy</h2>
+      <p>RealScan is not directed at children under the age of 13 and does not knowingly collect any information from children.</p>
+    </section>
+
+    <section>
+      <h2>Changes to This Policy</h2>
+      <p>If this policy changes, the updated version will be posted at this URL with a revised "Last updated" date.</p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <div class="contact-card">
+        <div class="contact-icon">✉️</div>
+        <p>Questions about this privacy policy? Reach us at <strong><a href="mailto:realscan.extension@gmail.com">realscan.extension@gmail.com</a></strong></p>
+      </div>
+    </section>
+
+    <footer>
+      <span>⬡ REALSCAN · AI CONTENT DETECTOR</span>
+      <span class="footer-accent">v1.3.0</span>
+    </footer>
+
+  </div>
+</body>
+</html>
